@@ -101,7 +101,7 @@ app.get("/getprice", (req, res) => {
           res.send("Error Sending Email");
         }
         else{
-          res.send("Could not find cryptocurrency with that name");
+          res.send("Could not find cryptocurrency with that name").sendStatus(200)
         }
       })
      
@@ -123,7 +123,7 @@ app.get("/getprice", (req, res) => {
               if (er) {
                 res.send("Error inserting data in database.");
               } else {
-                res.send("Email Sent And Database Updated");
+                res.send("Email Sent And Database Updated").sendStatus(200)
               }
             }
           );
@@ -143,9 +143,9 @@ app.get("/gethistory", (req, res) => {
     [email],
     (er, resulta) => {
       if (resulta.length > 0) {
-        res.send(resulta);
+        res.send(resulta).sendStatus(200)
       } else {
-        res.send("No history found linked to provided email.");
+        res.send("No history found linked to provided email.").sendStatus(200)
       }
       if (er) {
         console.log(er);

@@ -44,7 +44,7 @@ db.getConnection((err, connection) => {
 // email text
 function emailtext(cryptoname, price, email) {
   const mailOptions = {
-    from: "gaurav27c@gmail.com",
+    from: process.env.EMAIL,
     to: email,
     subject: `${cryptoname} price update`,
     html: `<div>Dear User</div>
@@ -65,7 +65,7 @@ function emailtext(cryptoname, price, email) {
 // when coin name is wrong email
 function failedprice(cryptoname, email) {
   const mailOptions = {
-    from: "gaurav27c@gmail.com",
+    from: process.env.EMAIL,
     to: email,
     subject: `${cryptoname} price is not available`,
     html: `<div>Dear User</div>

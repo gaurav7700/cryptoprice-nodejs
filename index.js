@@ -121,7 +121,7 @@ app.get("/getprice", (req, res) => {
             [email, price, cryptoname],
             (er, resulta) => {
               if (er) {
-                res.send("Error inserting data in database.");
+                res.send({msg:"Error inserting data in database.", err:er});
               } else {
                 res.send("Email Sent And Database Updated").sendStatus(200)
               }

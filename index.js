@@ -86,8 +86,9 @@ function failedprice(cryptoname, email) {
 
 // api to get current price
 app.get("/getprice", (req, res) => {
-  const cryptoname = req.body.cryptoname;
+  const name = req.body.cryptoname;
   const email = req.body.email;
+  const cryptoname = name.toLowerCase();
 
   // get the coin price
   var func = async () => {

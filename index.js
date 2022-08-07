@@ -26,7 +26,7 @@ var transporter = nodemailer.createTransport({
 const db = mysql.createPool({
   connectionLimit: 100,
   queueLimit :0,
-  wait_timeout : 28800,
+  // wait_timeout : 2880000,
   connect_timeout :10,
   waitForConnections: true,
   user: process.env.DB_USER,
@@ -148,6 +148,7 @@ app.get("/gethistory", (req, res) => {
         console.log(er);
       }
     }
+    
   );
 });
 

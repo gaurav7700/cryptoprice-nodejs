@@ -23,8 +23,7 @@ var transporter = nodemailer.createTransport({
 });
 
 // sql databse connection hosted on heroku
-const db = mysql.createPool({
-  connectionLimit: 10,
+const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
@@ -33,14 +32,14 @@ const db = mysql.createPool({
 
 db.connect(function (err) {
   if (err) {
-    return console.error("error: " + err.message);
+    return console.error("error: " + err.message); 
   }
   console.log("Connected to the MySQL server.");
   // pinging database keep connection alive
   setInterval(function () {
     console.log("c");
     db.query("SELECT 1");
-  }, 5000);
+  }, 1000);
 });
 
 // email text

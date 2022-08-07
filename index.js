@@ -23,23 +23,22 @@ var transporter = nodemailer.createTransport({
 });
 
 // sql databse connection hosted on heroku
-const db = mysql.createConnection({
+const db = mysql.createPool({
+  connectionLimit: 100,
+  queueLimit :0,
+  wait_timeout : 28800,
+  connect_timeout :10,
+  waitForConnections: true,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   host: "us-cdbr-east-06.cleardb.net",
 });
 
-db.connect(function (err) {
-  if (err) {
-    return console.error("error: " + err.message); 
-  }
-  console.log("Connected to the MySQL server.");
-  // pinging database keep connection alive
-  setInterval(function () {
-    console.log("c");
-    db.query("SELECT 1");
-  }, 1000);
+db.getConnection((err, connection) => {
+  if (err) throw err;
+  console.log(connection)
+
 });
 
 // email text
@@ -99,15 +98,13 @@ app.get("/getprice", (req, res) => {
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           res.send("Error Sending Email");
-        }
-        else{
-          res.send("Could not find cryptocurrency with that name").sendStatus(200)
-        }
-      })
-     
+        } else {
+          res
+            .send("Could not find cryptocurrency with that name")
 
+        }
+      });
     } else {
-
       const price = data.data.market_data.current_price.usd;
       const mailOptions = emailtext(cryptoname, price, email);
 
@@ -121,9 +118,9 @@ app.get("/getprice", (req, res) => {
             [email, price, cryptoname],
             (er, resulta) => {
               if (er) {
-                res.send({msg:"Error inserting data in database.", err:er});
+                res.send({ msg: "Error inserting data in database.", err: er });
               } else {
-                res.send("Email Sent And Database Updated").sendStatus(200)
+                res.send("Email Sent And Database Updated")
               }
             }
           );
@@ -143,9 +140,9 @@ app.get("/gethistory", (req, res) => {
     [email],
     (er, resulta) => {
       if (resulta.length > 0) {
-        res.send(resulta).sendStatus(200)
+        res.send(resulta)
       } else {
-        res.send("No history found linked to provided email.").sendStatus(200)
+        res.send("No history found linked to provided email.")
       }
       if (er) {
         console.log(er);
